@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech & Engineering Field Notes | Guides, CAD/CAE & Hardware</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        blueprint: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0066cc',
+                            600: '#0052a3',
+                            700: '#003d7a',
+                            900: '#00264d',
+                        },
+                        darkbg: '#0f172a',
+                        darkcard: '#1e293b',
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .font-mono-tech {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Custom Blueprint Grid Background */
+        .bg-grid-pattern-dark {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        }
+        .bg-grid-pattern-light {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 102, 204, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 102, 204, 0.06) 1px, transparent 1px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0066cc;
+            border-radius: 4px;
+        }
+        .badge-code {
+            border: 1px solid rgba(0, 102, 204, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-darkbg/90 dark:bg-darkbg/90 border-b border-slate-800 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-10 h-10 rounded-lg bg-blueprint-500 flex items-center justify-center text-white font-mono font-bold text-lg shadow-lg shadow-blueprint-500/30">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                            Tech & Engineering
+                            <span class="text-xs px-2 py-0.5 rounded bg-blueprint-500/20 text-blueprint-500 dark:text-blueprint-400 font-mono border border-blueprint-500/30">v2.4</span>
+                        </span>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono hidden sm:block">Field Notes, CAD/CAE & Hardware Logs</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-1 font-medium text-sm">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-md text-blueprint-500 dark:text-blueprint-400 font-semibold bg-blueprint-500/10 transition">
+                        <i class="fa-solid fa-house mr-1.5 text-xs"></i> Overview
+                    </button>
+                    <button onclick="switchTab('articles')" id="nav-articles" class="nav-btn px-3 py-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-blueprint-500 dark:hover:text-blueprint-400 transition">
+                        <i class="fa-solid fa-book-open mr-1.5 text-xs"></i> Articles & Guides
+                    </button>
+                    <button onclick="switchTab('projects')" id="nav-projects" class="nav-btn px-3 py-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-blueprint-500 dark:hover:text-blueprint-400 transition">
+                        <i class="fa-solid fa-flask mr-1.5 text-xs"></i> Projects
+                    </button>
+                    <button onclick="switchTab('resources')" id="nav-resources" class="nav-btn px-3 py-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-blueprint-500 dark:hover:text-blueprint-400 transition">
+                        <i class="fa-solid fa-layer-group mr-1.5 text-xs"></i> Resource Hub
+                    </button>
+                    <button onclick="switchTab('about')" id="nav-about" class="nav-btn px-3 py-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-blueprint-500 dark:hover:text-blueprint-400 transition">
+                        <i class="fa-solid fa-user-gear mr-1.5 text-xs"></i> About
+                    </button>
+                </nav>
+
+                <!-- Search & Controls -->
+                <div class="flex items-center space-x-3">
+                    <div class="relative hidden sm:block w-48 lg:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Search guides, specs..." 
+                               class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blueprint-500 font-mono transition">
+                    </div>
+
+                    <!-- Dark/Light Theme Switcher -->
+                    <button onclick="toggleTheme()" id="theme-toggle-btn" title="Toggle Light/Dark Theme" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-blueprint-500 transition">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-slate-800 bg-slate-900 px-4 py-3 space-y-2">
+            <input type="text" oninput="handleGlobalSearch(this.value)" placeholder="Search guides, specs..." 
+                   class="w-full mb-2 pl-8 pr-3 py-2 text-xs rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 font-mono">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 rounded">Home Overview</button>
+            <button onclick="switchTab('articles'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 rounded">Articles & Guides</button>
+            <button onclick="switchTab('projects'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 rounded">Projects Showcase</button>
+            <button onclick="switchTab('resources'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 rounded">Resource Repository</button>
+            <button onclick="switchTab('about'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 rounded">About / Workbench</button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Hero / Intro Banner (Visible on Home view) -->
+        <section id="hero-banner" class="relative rounded-2xl p-6 sm:p-10 mb-10 overflow-hidden bg-gradient-to-r from-blueprint-900/40 via-slate-900 to-slate-900 border border-blueprint-500/20 shadow-2xl">
+            <div class="absolute inset-0 bg-grid-pattern-dark opacity-30 pointer-events-none"></div>
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blueprint-500/10 border border-blueprint-500/30 text-blueprint-400 text-xs font-mono mb-4">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ACTIVE WORKBENCH LOGS
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+                    Engineering Notebook & <span class="text-blueprint-400 font-mono">&lt;Maker Hub/&gt;</span>
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base mb-6 leading-relaxed">
+                    A curated collection of practical guides, CAD/CAE software benchmarks, Python system modeling tutorials, legacy radio hardware restoration notes, and open-source engineering reference tools.
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="switchTab('articles')" class="px-5 py-2.5 rounded-lg bg-blueprint-500 hover:bg-blueprint-600 text-white font-medium text-sm transition shadow-lg shadow-blueprint-500/25 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Read Tutorials
+                    </button>
+                    <button onclick="switchTab('resources')" class="px-5 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-toolbox text-blueprint-400"></i> Open Resource Directory
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="mt-8 pt-6 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono text-xs">
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-slate-400 block mb-1">TUTORIALS</span>
+                    <span class="text-xl font-bold text-blueprint-400" id="stat-articles">18 Published</span>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-slate-400 block mb-1">PROJECT BUILDS</span>
+                    <span class="text-xl font-bold text-emerald-400" id="stat-projects">6 Active</span>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-slate-400 block mb-1">CURATED TOOLS</span>
+                    <span class="text-xl font-bold text-amber-400" id="stat-resources">42 Verified</span>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-slate-400 block mb-1">PRIMARY DOMAIN</span>
+                    <span class="text-xl font-bold text-purple-400">Mech & RF Spec</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 1: ARTICLES & GUIDES -->
+        <section id="view-articles-wrapper" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-feather text-blueprint-500"></i> Articles & Field Guides
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Detailed testing reviews, reverse engineering walkthroughs & software benchmarks.</p>
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div class="flex flex-wrap gap-2" id="category-filters">
+                    <button onclick="filterCategory('All')" class="cat-pill active-pill px-3 py-1.5 rounded-full text-xs font-mono font-medium transition bg-blueprint-500 text-white shadow-md">
+                        All (4)
+                    </button>
+                    <button onclick="filterCategory('CAD/CAE')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-mono font-medium transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700">
+                        CAD / CAE
+                    </button>
+                    <button onclick="filterCategory('Reverse Engineering')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-mono font-medium transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700">
+                        Reverse Eng.
+                    </button>
+                    <button onclick="filterCategory('Programming')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-mono font-medium transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700">
+                        Programming
+                    </button>
+                    <button onclick="filterCategory('Hardware')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-mono font-medium transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700">
+                        Hardware
+                    </button>
+                </div>
+            </div>
+
+            <!-- Articles Grid -->
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically Populated by JS -->
+            </div>
+        </section>
+
+        <!-- VIEW 2: PROJECTS SHOWCASE (Hidden by default or toggled) -->
+        <section id="view-projects-wrapper" class="hidden space-y-6">
+            <div class="pb-4 border-b border-slate-200 dark:border-slate-800">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-flask text-emerald-500"></i> Physical & Software Projects
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Major ongoing restores, open-source engineering packages, and mechanical builds.</p>
+            </div>
+
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamically Populated by JS -->
+            </div>
+        </section>
+
+        <!-- VIEW 3: RESOURCE REPOSITORY -->
+        <section id="view-resources-wrapper" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-amber-500"></i> Engineering Resource Repository
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Curated software tools, calculators, cheat sheets, and spec sheets for makers & students.</p>
+                </div>
+            </div>
+
+            <div id="resources-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically Populated by JS -->
+            </div>
+        </section>
+
+        <!-- VIEW 4: ABOUT & WORKBENCH -->
+        <section id="view-about-wrapper" class="hidden space-y-8 max-w-4xl mx-auto">
+            <div class="bg-slate-900/60 p-8 rounded-2xl border border-slate-800 shadow-xl space-y-6">
+                <div class="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-slate-800">
+                    <div class="w-24 h-24 rounded-full bg-blueprint-500/20 border-2 border-blueprint-500 flex items-center justify-center text-blueprint-400 text-3xl font-mono font-bold shadow-lg">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <h2 class="text-2xl font-bold text-white">Engineering Author & Maker</h2>
+                        <p class="text-blueprint-400 font-mono text-xs mb-2">Mechanical / RF Software Hardware Integrator</p>
+                        <p class="text-slate-300 text-sm">
+                            Documenting practical engineering lessons, benchmarking open-source CAD/CAE tools, writing numerical solver routines, and restoring vintage communications hardware.
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-3 font-mono text-blueprint-400 flex items-center gap-2">
+                        <i class="fa-solid fa-screwdriver-wrench"></i> Lab Workbench & Tooling Stack
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                        <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700">
+                            <span class="text-emerald-400 font-bold block mb-2"><i class="fa-solid fa-laptop-code"></i> Software CAD / CAE Stack</span>
+                            <ul class="space-y-1 text-slate-300">
+                                <li>• FreeCAD 0.21 (Parametric Modeling)</li>
+                                <li>• Elmer FEM & CalculiX (Thermal/Stress)</li>
+                                <li>• OpenFOAM (CFD Simulations)</li>
+                                <li>• KiCad 7.0 (PCB Design)</li>
+                                <li>• GNU Octave & Python PySINDy</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700">
+                            <span class="text-amber-400 font-bold block mb-2"><i class="fa-solid fa-microchip"></i> Hardware & RF Lab</span>
+                            <ul class="space-y-1 text-slate-300">
+                                <li>• Rigol DS1054Z 100MHz Oscilloscope</li>
+                                <li>• HackRF One SDR Vector Network Analyzer</li>
+                                <li>• Hakko FX-888D Soldering Station</li>
+                                <li>• Custom 3D Printed Prototyping Rig</li>
+                                <li>• Fluke 87V True-RMS Multimeter</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ARTICLE READER MODAL (FULL TEMPLATE WITH TOC, CALLOUTS, BOM & CODE SPAN) -->
+    <div id="article-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md overflow-y-auto flex justify-center p-2 sm:p-4 md:p-6">
+        <div class="relative w-full max-w-5xl bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl shadow-2xl my-auto overflow-hidden flex flex-col max-h-[92vh]">
+            
+            <!-- Modal Header / Bar -->
+            <div class="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-slate-900/95 border-b border-slate-800 backdrop-blur">
+                <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
+                    <span id="modal-category" class="px-2 py-0.5 rounded bg-blueprint-500/20 text-blueprint-400 border border-blueprint-500/30">CATEGORY</span>
+                    <span>•</span>
+                    <span id="modal-date">Date</span>
+                    <span>•</span>
+                    <span id="modal-readtime"><i class="fa-regular fa-clock mr-1"></i> 8 min read</span>
+                </div>
+                <button onclick="closeArticleModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-6 sm:p-10 overflow-y-auto space-y-8 flex-grow" id="modal-body">
+                <!-- Dynamically filled by Javascript -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-3 bg-slate-950 border-t border-slate-800 flex justify-between items-center text-xs font-mono text-slate-500">
+                <span>Tech & Engineering Field Notes • Netlify Deployment Ready</span>
+                <button onclick="closeArticleModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition">Close Article</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 text-slate-500 py-8 text-xs font-mono mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-microchip text-blueprint-500"></i>
+                <span>Tech & Engineering Field Notes &copy; 2026</span>
+            </div>
+            <p>Designed for static HTML/CSS deployment on Netlify</p>
+            <div class="flex space-x-4 text-slate-400">
+                <a href="#" class="hover:text-blueprint-400"><i class="fa-brands fa-github text-sm"></i></a>
+                <a href="#" class="hover:text-blueprint-400"><i class="fa-solid fa-rss text-sm"></i></a>
+                <a href="#" class="hover:text-blueprint-400"><i class="fa-brands fa-linkedin text-sm"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* --- MOCK DATASET: ARTICLES, PROJECTS, RESOURCES --- */
+        const articlesData = [
+            {
+                id: 'radio-restore-1',
+                title: 'Reverse Engineering & Restoring a 1974 Zenith Trans-Oceanic Radio',
+                category: 'Reverse Engineering',
+                date: 'Sep 24, 2026',
+                readTime: '12 min',
+                excerpt: 'Full teardown, circuit debugging, replacing faulty germanium transistors, and aligning the RF local oscillator stage on a vintage multi-band receiver.',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-white mb-2">Reverse Engineering & Restoring a 1974 Zenith Trans-Oceanic Radio</h1>
+                            <p class="text-slate-400 text-sm font-mono">Restoration Log #RF-7023 • Hardware Reverse Engineering</p>
+                        </div>
+
+                        <!-- Sticky Table of Contents -->
+                        <div class="p-4 rounded-xl bg-slate-800/80 border border-blueprint-500/30 text-xs font-mono space-y-2">
+                            <span class="text-blueprint-400 font-bold uppercase tracking-wider block"><i class="fa-solid fa-list-ol mr-1"></i> Quick Table of Contents</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-slate-300">
+                                <a href="#sec-1" class="hover:text-blueprint-400">• 1. Initial Assessment & Safety Check</a>
+                                <a href="#sec-2" class="hover:text-blueprint-400">• 2. Schematic & Silicon Substitution</a>
+                                <a href="#sec-3" class="hover:text-blueprint-400">• 3. Bill of Materials (BOM) Replacement</a>
+                                <a href="#sec-4" class="hover:text-blueprint-400">• 4. Code / Tuning Calculations</a>
+                            </div>
+                        </div>
+
+                        <!-- Callout Box: Warning -->
+                        <div class="p-4 rounded-xl bg-amber-500/10 border-l-4 border-amber-500 text-amber-200 text-xs space-y-1">
+                            <div class="font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-amber-400"></i> HIGH VOLTAGE / MAINS WARNING</div>
+                            <p>Always use an isolation transformer when bench testing vintage chassis powered off AC mains line supplies!</p>
+                        </div>
+
+                        <div id="sec-1" class="space-y-3">
+                            <h2 class="text-xl font-bold text-white border-b border-slate-800 pb-2">1. Initial Assessment & Diagnostic</h2>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Upon receiving the receiver, the audio stage produced a heavy 60Hz hum, and the shortwave bands were completely silent. Visual inspection showed leaking electrolytic filter capacitors in the power supply section and silver-mica disease inside the 2nd IF transformer.
+                            </p>
+                        </div>
+
+                        <!-- Figure / Photo box -->
+                        <figure class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                            <div class="bg-slate-900 h-48 sm:h-64 rounded-lg border border-slate-800 flex flex-col items-center justify-center font-mono text-slate-500 text-xs gap-2">
+                                <i class="fa-solid fa-wave-square text-4xl text-blueprint-500/40"></i>
+                                <span>[Oscilloscope Trace: 455 kHz IF Oscillator Output]</span>
+                            </div>
+                            <figcaption class="text-xs font-mono text-slate-400 mt-2">Figure 1.1: RF Signal Generator feeding 455kHz intermediate frequency signal into pin 3 of the mixer tube.</figcaption>
+                        </figure>
+
+                        <!-- BOM Table -->
+                        <div id="sec-3" class="space-y-3">
+                            <h2 class="text-xl font-bold text-white border-b border-slate-800 pb-2">2. Replacement Bill of Materials (BOM)</h2>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs font-mono border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-800 text-blueprint-400 border-b border-slate-700">
+                                            <th class="p-2.5">Designator</th>
+                                            <th class="p-2.5">Original Part</th>
+                                            <th class="p-2.5">Modern Replacement</th>
+                                            <th class="p-2.5">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-800 text-slate-300">
+                                        <tr><td class="p-2">C101, C102</td><td class="p-2">50uF / 150V Electrolytic</td><td class="p-2">47uF / 250V Nichicon PW</td><td class="p-2 text-emerald-400">Replaced</td></tr>
+                                        <tr><td class="p-2">Q1 (RF Amp)</td><td class="p-2">NTE160 Germanium</td><td class="p-2">2N3904 (Silicon with bias tweak)</td><td class="p-2 text-emerald-400">Modified</td></tr>
+                                        <tr><td class="p-2">D1 (Detector)</td><td class="p-2">1N60 Point Contact</td><td class="p-2">1N34A Germanium Diode</td><td class="p-2 text-amber-400">In Stock</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Code snippet with Copy button -->
+                        <div id="sec-4" class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono text-slate-400"><i class="fa-solid fa-code text-blueprint-400"></i> Python: LC Tank Oscillator Frequency Calculation</span>
+                                <button onclick="copyCode(this)" data-code="import math&#10;&#10;def calculate_lc_freq(inductance_uh, capacitance_pf):&#10;    L = inductance_uh * 1e-6&#10;    C = capacitance_pf * 1e-12&#10;    freq_hz = 1 / (2 * math.pi * math.sqrt(L * C))&#10;    return freq_hz / 1e6  # Return MHz&#10;&#10;# IF Tank circuit parameters&#10;print(f'Resonant Freq: {calculate_lc_freq(220, 555):.3f} MHz')" class="px-2 py-1 rounded bg-slate-800 hover:bg-blueprint-500 text-white font-mono text-xs transition">
+                                    <i class="fa-regular fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                            <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto"><code><span class="text-purple-400">import</span> math
+
+<span class="text-purple-400">def</span> <span class="text-blue-400">calculate_lc_freq</span>(inductance_uh, capacitance_pf):
+    L = inductance_uh * <span class="text-amber-400">1e-6</span>
+    C = capacitance_pf * <span class="text-amber-400">1e-12</span>
+    freq_hz = <span class="text-amber-400">1</span> / (<span class="text-amber-400">2</span> * math.pi * math.sqrt(L * C))
+    <span class="text-purple-400">return</span> freq_hz / <span class="text-amber-400">1e6</span>  <span class="text-slate-500"># Return MHz</span>
+
+<span class="text-slate-500"># IF Tank circuit parameters</span>
+print(<span class="text-emerald-300">f"Resonant Freq: {calculate_lc_freq(220, 555):.3f} MHz"</span>)</code></pre>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'cae-benchmarking-2',
+                title: 'Benchmarking Open-Source CAE: Elmer vs. CalculiX Thermal Stress Analysis',
+                category: 'CAD/CAE',
+                date: 'Sep 18, 2026',
+                readTime: '15 min',
+                excerpt: 'Comparing meshing efficiency, solver convergence speeds, and post-processing thermal contours between Elmer FEM and CalculiX on a turbine blade mesh.',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-white mb-2">Benchmarking Open-Source CAE: Elmer vs. CalculiX Thermal Stress Analysis</h1>
+                            <p class="text-slate-400 text-sm font-mono">Benchmark Series #FEA-04 • CAD / CAE Testing</p>
+                        </div>
+
+                        <!-- Callout Box: Note -->
+                        <div class="p-4 rounded-xl bg-blueprint-500/10 border-l-4 border-blueprint-500 text-blueprint-200 text-xs space-y-1">
+                            <div class="font-bold flex items-center gap-2"><i class="fa-solid fa-circle-info text-blueprint-400"></i> KEY TAKEAWAY</div>
+                            <p>For coupled steady-state thermo-mechanical solver routines, Elmer achieved faster convergence with second-order tet elements (10-node), while CalculiX excels in non-linear contact mechanics.</p>
+                        </div>
+
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Open-source finite element tools have reached prime maturity. In this evaluation, we run identical STEP geometries through FreeCAD's FEM Workbench, Gmsh meshing, and evaluate output accuracy against analytical thermal conductivity solutions.
+                        </p>
+
+                        <!-- Code block -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono text-slate-400"><i class="fa-solid fa-terminal text-blueprint-400"></i> CalculiX INP Solver Setup snippet</span>
+                                <button onclick="copyCode(this)" data-code="*HEADING&#10;Turbine Blade Thermo-Mechanical Benchmark&#10;*NODE, NSET=NALL&#10;1, 0.0000, 0.0000, 0.0000&#10;*ELEMENT, TYPE=C3D10, ELSET=EALL&#10;*MATERIAL, NAME=INCONEL718&#10;*CONDUCTIVITY&#10;11.4&#10;*EXPANSION&#10;13.0E-6" class="px-2 py-1 rounded bg-slate-800 hover:bg-blueprint-500 text-white font-mono text-xs transition">
+                                    <i class="fa-regular fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                            <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 overflow-x-auto"><code><span class="text-blueprint-400">*HEADING</span>
+Turbine Blade Thermo-Mechanical Benchmark
+<span class="text-blueprint-400">*NODE, NSET=NALL</span>
+1, 0.0000, 0.0000, 0.0000
+<span class="text-blueprint-400">*MATERIAL, NAME=INCONEL718</span>
+<span class="text-blueprint-400">*CONDUCTIVITY</span>
+11.4
+<span class="text-blueprint-400">*EXPANSION</span>
+13.0E-6</code></pre>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'pysindy-system-id-3',
+                title: 'Nonlinear Mechanical Dynamics Identification in Python with PySINDy',
+                category: 'Programming',
+                date: 'Aug 30, 2026',
+                readTime: '10 min',
+                excerpt: 'Extracting differential equations directly from physical sensor data using sparse regression techniques to model damped pendulum oscillation.',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-white mb-2">Nonlinear Mechanical Dynamics Identification in Python with PySINDy</h1>
+                            <p class="text-slate-400 text-sm font-mono">Numerical Solver Series #PY-102 • Programming</p>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            System identification allows engineers to reverse-engineer differential equations from empirical motion capture or IMU accelerometer logs. Here is a working implementation using PySINDy and SciPy.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'freecad-scripting-4',
+                title: 'Automating Custom Enclosure Models in FreeCAD with Python Scripts',
+                category: 'CAD/CAE',
+                date: 'Aug 14, 2026',
+                readTime: '9 min',
+                excerpt: 'Generate parametric, NEMA-compliant electronics enclosures directly from JSON PCB bounding box specs via FreeCAD macro commands.',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-white mb-2">Automating Custom Enclosure Models in FreeCAD with Python Scripts</h1>
+                            <p class="text-slate-400 text-sm font-mono">Macro Series #FC-08 • CAD/CAE</p>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Parametric modeling scripts streamline PCB prototyping by automatically generating mounting standoffs, port cutouts, and lid lip seal grooves.
+                        </p>
+                    </div>
+                `
+            }
+        ];
+
+        const projectsData = [
+            {
+                id: 'proj-1',
+                title: 'OpenCAE Integrated Automated Test Pipeline',
+                status: 'In Progress',
+                statusColor: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+                category: 'Software / CAE',
+                tools: ['Python', 'FreeCAD API', 'OpenFOAM', 'Docker'],
+                desc: 'A continuous integration pipeline running automated mesh sensitivity analysis whenever new CAD STEP geometry is pushed to GitHub.'
+            },
+            {
+                id: 'proj-2',
+                title: 'Vintage Tube Radio Receiver Modernization',
+                status: 'Completed',
+                statusColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                category: 'Hardware / RF',
+                tools: ['KiCad 7.0', 'Rigol Oscilloscope', 'HackRF', '3D Printing'],
+                desc: 'Complete restoration of a 1970s receiver with added Bluetooth audio input bypass, rebuilt power supply, and precision dial calibration.'
+            },
+            {
+                id: 'proj-3',
+                title: 'PySINDy Vibration Analysis Workbench',
+                status: 'Prototype',
+                statusColor: 'bg-blueprint-500/20 text-blueprint-400 border-blueprint-500/30',
+                category: 'Programming',
+                tools: ['Python', 'NumPy', 'SciPy', 'Streamlit'],
+                desc: 'Interactive GUI tool to parse CSV vibration data from microcontrollers and derive governing equations of motion.'
+            }
+        ];
+
+        const resourcesData = [
+            {
+                id: 'res-1',
+                title: 'FreeCAD Parametric Modeling Cheat Sheet',
+                category: 'CAD / CAE Software',
+                format: 'PDF Spec Sheet',
+                formatColor: 'bg-red-500/20 text-red-400 border-red-500/30',
+                desc: 'Essential keyboard shortcuts, constraint solver tips, and PartDesign workflow guidelines.',
+                link: '#'
+            },
+            {
+                id: 'res-2',
+                title: 'PySINDy Open Source Solver Repo',
+                category: 'Developer Tools',
+                format: 'Open Source Repo',
+                formatColor: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+                desc: 'Sparse Identification of Non-linear Dynamics software library in Python.',
+                link: 'https://github.com/dynamicslab/pysindy'
+            },
+            {
+                id: 'res-3',
+                title: 'RF Capacitor Self-Resonant Frequency Reference',
+                category: 'Hardware Specs',
+                format: 'Web Tool',
+                formatColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                desc: 'Calculator for evaluating ceramic/film capacitor parasitic inductance across VHF/UHF bands.',
+                link: '#'
+            },
+            {
+                id: 'res-4',
+                title: 'Elmer FEM Thermal Solver Manual',
+                category: 'CAD / CAE Software',
+                format: 'PDF Spec Sheet',
+                formatColor: 'bg-red-500/20 text-red-400 border-red-500/30',
+                desc: 'Official boundary condition configuration reference guide for multi-physics heat transfers.',
+                link: '#'
+            }
+        ];
+
+        /* --- STATE MANAGEMENT --- */
+        let currentTab = 'home';
+        let currentCategory = 'All';
+        let searchQuery = '';
+
+        function renderArticles() {
+            const container = document.getElementById('articles-grid');
+            if (!container) return;
+
+            const filtered = articlesData.filter(art => {
+                const matchesCat = (currentCategory === 'All' || art.category === currentCategory);
+                const matchesSearch = searchQuery === '' || 
+                    art.title.toLowerCase().includes(searchQuery) || 
+                    art.excerpt.toLowerCase().includes(searchQuery) ||
+                    art.category.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-500 font-mono text-sm bg-slate-900/50 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-magnifying-glass text-2xl mb-2 text-slate-600"></i>
+                        <p>No engineering guides match your query: "${searchQuery}"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(art => `
+                <div class="group relative rounded-xl bg-slate-900 border border-slate-800 hover:border-blueprint-500/50 transition-all duration-300 shadow-lg hover:shadow-blueprint-500/10 flex flex-col justify-between overflow-hidden">
+                    <div class="p-6 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-mono">
+                            <span class="px-2.5 py-0.5 rounded-full bg-blueprint-500/10 text-blueprint-400 border border-blueprint-500/20 font-medium">
+                                ${art.category}
+                            </span>
+                            <span class="text-slate-500"><i class="fa-regular fa-clock mr-1"></i>${art.readTime}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-blueprint-400 transition leading-snug">
+                            ${art.title}
+                        </h3>
+                        <p class="text-slate-400 text-xs leading-relaxed line-clamp-3">
+                            ${art.excerpt}
+                        </p>
+                    </div>
+                    <div class="px-6 py-4 bg-slate-950/60 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+                        <span class="text-slate-500">${art.date}</span>
+                        <button onclick="openArticleModal('${art.id}')" class="text-blueprint-400 font-semibold hover:text-blueprint-300 flex items-center gap-1">
+                            Read Guide <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-grid');
+            if (!container) return;
+
+            container.innerHTML = projectsData.map(proj => `
+                <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition space-y-4">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-mono text-slate-500 uppercase tracking-wider">${proj.category}</span>
+                            <h3 class="text-lg font-bold text-white mt-0.5">${proj.title}</h3>
+                        </div>
+                        <span class="px-2.5 py-1 rounded text-xs font-mono border ${proj.statusColor}">
+                            ${proj.status}
+                        </span>
+                    </div>
+                    <p class="text-slate-300 text-xs leading-relaxed">${proj.desc}</p>
+                    <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-800">
+                        ${proj.tools.map(t => `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[11px] font-mono border border-slate-700">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderResources() {
+            const container = document.getElementById('resources-grid');
+            if (!container) return;
+
+            const filtered = resourcesData.filter(res => {
+                return searchQuery === '' || 
+                    res.title.toLowerCase().includes(searchQuery) ||
+                    res.category.toLowerCase().includes(searchQuery) ||
+                    res.desc.toLowerCase().includes(searchQuery);
+            });
+
+            container.innerHTML = filtered.map(res => `
+                <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between space-y-3">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono">
+                            <span class="text-slate-400">${res.category}</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono border ${res.formatColor}">${res.format}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">${res.title}</h4>
+                        <p class="text-slate-400 text-xs">${res.desc}</p>
+                    </div>
+                    <a href="${res.link}" target="_blank" onclick="showToast('Opening external reference resource...')" class="inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded bg-slate-800 hover:bg-blueprint-500 hover:text-white text-slate-300 text-xs font-mono transition">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Resource
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function openArticleModal(id) {
+            const article = articlesData.find(a => a.id === id);
+            if (!article) return;
+
+            document.getElementById('modal-category').innerText = article.category;
+            document.getElementById('modal-date').innerText = article.date;
+            document.getElementById('modal-readtime').innerText = article.readTime;
+            document.getElementById('modal-body').innerHTML = article.content;
+
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            document.getElementById('article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        /* TAB NAVIGATION LOGIC */
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Hide all tab views
+            ['home', 'articles', 'projects', 'resources', 'about'].forEach(t => {
+                const el = document.getElementById(`view-${t}-wrapper`);
+                if (el) el.classList.add('hidden');
+            });
+
+            const heroBanner = document.getElementById('hero-banner');
+
+            // Update active state in menu nav
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blueprint-500', 'dark:text-blueprint-400', 'font-semibold', 'bg-blueprint-500/10');
+                btn.classList.add('text-slate-600', 'dark:text-slate-300');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tab}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-blueprint-500', 'dark:text-blueprint-400', 'font-semibold', 'bg-blueprint-500/10');
+            }
+
+            if (tab === 'home') {
+                heroBanner.classList.remove('hidden');
+                document.getElementById('view-articles-wrapper').classList.remove('hidden');
+            } else {
+                heroBanner.classList.add('hidden');
+                const targetView = document.getElementById(`view-${tab}-wrapper`);
+                if (targetView) targetView.classList.remove('hidden');
+            }
+
+            // Trigger re-renders
+            renderArticles();
+            renderProjects();
+            renderResources();
+        }
+
+        /* CATEGORY FILTER LOGIC */
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.classList.remove('bg-blueprint-500', 'text-white', 'shadow-md');
+                btn.classList.add('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+            });
+            event.target.classList.remove('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+            event.target.classList.add('bg-blueprint-500', 'text-white', 'shadow-md');
+            
+            renderArticles();
+        }
+
+        /* SEARCH FILTER LOGIC */
+        function handleGlobalSearch(val) {
+            searchQuery = val.toLowerCase();
+            renderArticles();
+            renderResources();
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                document.body.classList.remove('bg-darkbg', 'text-slate-100');
+                document.body.classList.add('bg-slate-50', 'text-slate-900');
+                showToast("Switched to Light Theme Mode");
+            } else {
+                html.classList.add('dark');
+                document.body.classList.remove('bg-slate-50', 'text-slate-900');
+                document.body.classList.add('bg-darkbg', 'text-slate-100');
+                showToast("Switched to Blueprint Dark Theme");
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function copyCode(btn) {
+            const codeText = btn.getAttribute('data-code');
+            
+            // Clipboard standard workaround
+            const textToCopy = unescape(codeText.replace(/&#10;/g, '\n'));
+            
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Copied!`;
+            btn.classList.add('bg-emerald-600/30');
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('bg-emerald-600/30');
+            }, 2000);
+
+            showToast("Snippet copied to clipboard!");
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'px-4 py-2.5 rounded-lg bg-slate-900 border border-blueprint-500/40 text-blueprint-400 font-mono text-xs shadow-xl flex items-center gap-2 animate-bounce';
+            toast.innerHTML = `<i class="fa-solid fa-terminal"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // Initial setup on window load
+        window.onload = function() {
+            renderArticles();
+            renderProjects();
+            renderResources();
+        }
+    </script>
+</body>
+</html>
